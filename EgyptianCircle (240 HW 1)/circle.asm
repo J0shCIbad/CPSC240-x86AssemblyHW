@@ -105,15 +105,15 @@ mov qword rax, 0
 call printf
 
 ;Prompt for radius
-mov qword rdi, stringoutputformat	;Consider removing<RRR>
+mov qword rdi, stringoutputformat
 mov qword rsi, promptmsg
-mov qword rax, 0					;Consider remove<RRR>
+mov qword rax, 0
 call printf
 
 ;Input first integer
 mov qword rdi, signedintegerinputformat
-push qword -1						;WHY, Consider altering <RRR>
-mov qword rsi, rsp					;WHY, Consider altering <RRR>
+push qword -1
+mov qword rsi, rsp
 mov qword rax, 0
 call scanf
 pop qword r15	;Inputted radius integer
@@ -121,12 +121,12 @@ pop qword r15	;Inputted radius integer
 ;Output the input
 mov qword rdi, inputverifyformat
 mov rsi, r15
-mov qword rdx, r15					;WHY, Both rsi and rdx hold inputted value
+mov qword rdx, r15					;Both rsi and rdx hold inputted value
 mov qword rax, 0
 call printf
 
 ; -----
-; Calculations ----- Have yet to do;
+; Calculations
 ; Due to input being a distance, inputs and outputs are assumed to be positive
 ; Circumfernce: C = 2r*22/7
 mov qword rax, 44
