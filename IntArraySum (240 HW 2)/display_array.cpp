@@ -24,7 +24,7 @@
  * Program Name: "Sum of Array of Integers"
  * Programming Languages: One module in C, three modules in x86, one module in C++
  * Date program began:     2020-Sep-13
- * Date program completed: 2020-Sep-xx
+ * Date program completed: 2020-Oct-03
  * Files in this program: main.c, manager.asm, input_array.asm, sum.asm, display_array.cpp
  * Status: Work in Progress
  *
@@ -48,8 +48,8 @@
  * is stored in the stack, starting from higher memory address to which 
  * int* arr points to, to lower memory address.
  */
-void display_array((long int)* arr, long int len){
-	for(long int i=0; i<len; i++, arr--){
+void display_array(long int* arr, long int len){
+	for(long int i=0; i<len; i++, arr++){
 		std::cout << *arr;
 		if(i == len-1){
 			std::cout << std::endl;
