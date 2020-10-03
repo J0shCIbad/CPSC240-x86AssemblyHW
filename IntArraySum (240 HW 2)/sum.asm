@@ -46,10 +46,7 @@
 
 ;Declare library functions called
 extern printf
-extern scanf
-
 global sum
-
 
 ; -----
 ; Initialize data to be used
