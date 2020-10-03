@@ -47,7 +47,8 @@
 
 ;Declare library functions called
 extern printf
-extern scanf
+extern input_array
+extern sum
 
 global manager
 
@@ -100,76 +101,6 @@ mov qword rsi, welcomemsg
 mov qword rax, 0
 call printf
 
-;Prompt for radius
-mov qword rdi, stringoutputformat	;Consider removing<RRR>
-mov qword rsi, promptmsg
-mov qword rax, 0					;Consider remove<RRR>
-call printf
-
-;Input first integer
-mov qword rdi, signedintegerinputformat
-push qword -1						;WHY, Consider altering <RRR>
-mov qword rsi, rsp					;WHY, Consider altering <RRR>
-mov qword rax, 0
-call scanf
-pop qword r15	;Inputted radius integer
-
-;Output the input
-mov qword rdi, inputverifyformat
-mov rsi, r15
-mov qword rdx, r15					;WHY, Both rsi and rdx hold inputted value
-mov qword rax, 0
-call printf
-
-; -----
-; Calculations ----- Have yet to do;
-; Due to input being a distance, inputs and outputs are assumed to be positive
-; Circumfernce: C = 2r*22/7
-mov qword rax, 44
-mov qword rdx, 0
-mul r15
-
-cmp rdx, 0
-jne overflowerror
-
-mov qword r14, 7
-div r14
-
-;Output circumference
-mov qword rdi, inputverifyformat
-mov rsi, rax
-	;rdx already contains remainder
-mov qword rax, 0
-call printf
-
-
-; Area: A = r*r*22 / 7
-mov qword rax, r15
-mov qword rdx, 0
-mul r15
-
-cmp rdx, 0
-jne overflowerror
-
-mov qword r14, 22
-mul r14
-
-cmp rdx, 0
-jne overflowerror
-
-mov qword r14, 7
-div r14
-
-push rax	;Store area in stack
-jmp finale
-
-overflowerror:
-mov qword rdi, stringoutputformat
-mov qword rsi, errormsg
-mov qword rax, 0
-call printf
-mov rax, -1
-push rax
 
 ; -----
 ; Output final results and exit messages
@@ -183,8 +114,6 @@ call printf
 ; -----
 ; Routine Epilogue
 ;Restore registers to original state
-pop rax		;Retrieve obtained area
-
 pop r8		;Remove extra -1 used to oven out offset, register is arbitrary
 popf
 pop rbx
