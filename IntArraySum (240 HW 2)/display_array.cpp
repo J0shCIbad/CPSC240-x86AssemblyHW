@@ -43,6 +43,7 @@
 
 #include <iostream>
 
+extern "C" void display_array(long int*, long int);
 /**
  * Displays an array to output. The array as implemented in assembly code
  * is stored in the stack, starting from higher memory address to which 
