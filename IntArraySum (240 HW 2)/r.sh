@@ -19,7 +19,7 @@ echo "Assemble sum.asm"
 nasm -f elf64 -l sum.lis -o sum.o sum.asm
 
 echo "Compile display_array.cpp"
-gcc -c -Wall -m64 -no-pie -o display_array.o display_array.cpp -std=c++11
+gcc -c -Wall -m64 -no-pie -lstdc++ -o display_array.o display_array.cpp -std=c++11
 
 echo "Compile main.c"
 gcc -c -Wall -m64 -no-pie -o main.o main.c -std=c11
@@ -36,9 +36,10 @@ echo "The script file will terminate"
 
 
 #Summary
-#The module circle.asm contains PIC non-compliant code.  The assembler outputs a non-compliant object file.
-
+#The modules manager.asm, input_array.asm, and sum.asm contains PIC non-compliant code.
+#The assembler outputs a non-compliant object file.
 #The C compiler is directed to create a non-compliant object file.
+#The C++ compiler is directed to create a non-compliant object file.
 
 #The linker received a parameter telling the linker to expect non-compliant object files, and to output a non-compliant executable.
 
