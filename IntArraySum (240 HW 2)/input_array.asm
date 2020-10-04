@@ -90,53 +90,82 @@ push qword -1	;Push extra to even out offset to 16
 
 mov r15, rdi		; Store the address to store array address to nonvolatile register
 mov r14, rsi		; Store the address to store length to nonvolatile register
-xor r13, r13		; To be used as counter variable for length
+mov r13, qword 0	; To be used as counter variable for length
+mov rax, qword 0
 
 inputloopstart:
 	;Input signed long integer
 	mov qword rdi, longintformat
 	push qword -1
-	mov qword rsi, rsp
+	push qword -1
+	mov rsi, rsp
 	xor rax, rax
 	call scanf
+	pop qword r12
+	pop qword r11
 
+	cdqe
 	cmp rax, 0
-	jg inputloopstart
+	jg goodinput
 	jl inputloopend
-	;User input was invalid
-	pop qword r12		; Remove invalid input
+	
+	; User input was invalid
+	; Flush buffer to avoid infinite error loop
 	mov qword rdi, stringoutputformat
-	mov qword rsi, invalidinputmsg
-	mov qword rax, 0
+	push qword -1
+	push qword -1
+	mov rsi, rsp
+	xor rax, rsp
+	call scanf
+	pop qword r12
+	pop qword r12
+	
+	mov qword rdi, stringoutputformat
+	push qword -1
+	push qword -1
+	mov qword rsi, rsp
+	call scanf		; Flushes buffer of invalid input preventing infinite error loop
+	pop qword r12
+	pop qword r12
+	
+	mov rdi, stringoutputformat
+	mov rsi, invalidinputmsg
+	xor rax, rax
 	call printf
 	jmp inputloopstart
-
+	goodinput:
+	push qword 0
+	push qword r12
+	inc r13
+	jmp inputloopstart
+	
 inputloopend:
-pop qword r12		; Clean up stack
 ; -----
 ; Allocate heap space for the inputted array and populate with user input
 mov rax, r13
-mov r11, 8
+mov r11, qword 8
 mul r11
 mov rdi, rax
-xor rax, rax
+mov r12, rax
+mov qword rax, 0
 call malloc
 
 cmp rax, 0
 je errorhandling
-xor rcx, rcx
-copyloopstart:
-	cmp rcx, r13
-	jge copyloopend
-	pop rbx
-	mov [rax + 8*rdi], rbx
-	inc rcx
-	jmp copyloopstart
 
-copyloopend:
+xor rcx, rcx
 mov [r14], r13
 mov [r15], rax
-jmp finale
+add rax, r12
+copyloopstart:
+	cmp rcx, r13
+	jge finale
+	pop rbx
+	pop r11
+	sub rax, 8
+	mov [rax], rbx
+	inc rcx
+	jmp copyloopstart
 
 ; -----
 ; Error handling block
@@ -149,6 +178,7 @@ call printf
 
 mov rcx, r13
 emptyloop:
+	pop rax
 	pop rax
 	loop emptyloop
 

@@ -130,8 +130,8 @@ je errorhandling
 ; 	Display array.
 ; Print the corresponding message, then call the display_array module to list the
 ; contents of array for confirmation by the user.
-mov qword rdi, stringoutputformat
-mov qword rsi, displayarraymsg
+mov qword rdi, displayarraymsg
+mov qword rsi, [arraylength]
 mov qword rax, 0
 call printf
 
@@ -148,12 +148,11 @@ mov rdi, qword [arrayaddress]
 mov rsi, qword [arraylength]
 xor rax, rax
 call sum
-
+mov r15, rax
 ; Print results
-mov qword rdi, stringoutputformat
-mov qword rsi, sumoutputmsg
-mov qword rdx, arraylength
-mov qword rcx, rax
+mov qword rdi, sumoutputmsg
+mov qword rsi, arraylength
+mov qword rdx, rax
 mov qword rax, 0
 call printf
 
@@ -175,6 +174,7 @@ mov qword rsi, exitmsg
 mov qword rax, 0
 call printf
 
+mov rax, r15
 ; -----
 ; Routine Epilogue
 ;Restore registers to original state

@@ -25,7 +25,7 @@ echo "Compile main.c"
 gcc -c -Wall -m64 -no-pie -o main.o main.c -std=c11
 
 echo "Link the object files"
-gcc -m64 -no-pie -o main.out -std=c11 main.o manager.o input_array.o sum.o display_array.o 
+g++ -m64 -fno-pie -no-pie -o main.out -std=c++17 main.o manager.o input_array.o sum.o display_array.o 
 
 echo "Run the program Sum of Array of Integers:"
 ./main.out
