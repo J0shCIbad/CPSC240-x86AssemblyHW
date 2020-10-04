@@ -1,25 +1,34 @@
 #!/bin/bash
 
-#Program: Egyptian Circle
+#Program: Sum of Array of Integers
 #Author: Josh Ibad
 
 #Delete some un-needed files
 rm *.o
 rm *.out
 
-echo "The script file for Program Egyptian Circle has begun"
+echo "The script file for Program Sum of Array of Integers has begun"
 
-echo "Assemble circle.asm"
-nasm -f elf64 -l circle.lis -o circle.o circle.asm
+echo "Assemble manager.asm"
+nasm -f elf64 -l manager.lis -o manager.o manager.asm
 
-echo "Compile egyptian.c"
-gcc -c -Wall -m64 -no-pie -o egyptian.o egyptian.c -std=c11
+echo "Assemble input_array.asm"
+nasm -f elf64 -l input_array.lis -o input_array.o input_array.asm
+
+echo "Assemble sum.asm"
+nasm -f elf64 -l sum.lis -o sum.o sum.asm
+
+echo "Compile display_array.cpp"
+gcc -c -Wall -m64 -no-pie -o display_array.o display_array.cpp -std=c++11
+
+echo "Compile main.c"
+gcc -c -Wall -m64 -no-pie -o main.o main.c -std=c11
 
 echo "Link the object files"
-gcc -m64 -no-pie -o egyptian.out -std=c11 egyptian.o circle.o
+gcc -m64 -no-pie -o main.out -std=c11 main.o manager.o input_array.o sum.o display_array.o 
 
-echo "Run the program Egyptian Circle:"
-./egyptian.out
+echo "Run the program Sum of Array of Integers:"
+./main.out
 
 echo "The script file will terminate"
 
