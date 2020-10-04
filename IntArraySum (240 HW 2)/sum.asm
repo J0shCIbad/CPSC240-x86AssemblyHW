@@ -42,7 +42,7 @@
 ; Assemble: ...
 ; Link: ...        ;Ref Jorgensen, page 226, "-no-pie"
 ; **********************************************
-
+extern printf
 
 ;Declare library functions called
 global sum

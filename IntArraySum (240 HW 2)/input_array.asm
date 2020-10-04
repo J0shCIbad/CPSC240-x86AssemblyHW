@@ -116,7 +116,8 @@ pop qword r12		; Clean up stack
 ; -----
 ; Allocate heap space for the inputted array and populate with user input
 mov rax, r13
-mul 0x08
+mov r11, 8
+mul r11
 mov rdi, rax
 xor rax, rax
 call malloc
