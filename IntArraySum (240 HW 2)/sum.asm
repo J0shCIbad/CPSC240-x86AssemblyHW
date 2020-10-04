@@ -97,15 +97,15 @@ jc invalidaddresserror
 xor rax, rax		; Zero out rax, the sum accumulator variable 
 
 sumloop:
-cmp rdi, rsi
-jge sumloopexit
-add rax, qword [rdi]		
-jo overflowerror	; If overflow error met, jump out of loop and run
-						; error handling code.
-add rdi, 8			; Increment the address by a long int's size (8 bytes)
-						; Done here to avoid overhead from a "qword [rdi + rcx*8]"
-						; Multiplications are more expensive than additions
-jmp finale
+	cmp rdi, rsi
+	jge finale
+	add rax, qword [rdi]		
+	jo overflowerror	; If overflow error met, jump out of loop and run
+							; error handling code.
+	add rdi, 8			; Increment the address by a long int's size (8 bytes)
+							; Done here to avoid overhead from a "qword [rdi + rcx*8]"
+							; Multiplications are more expensive than additions
+	jmp sumloop
 
 invalidaddresserror:		
 mov qword rdi, stringoutputformat

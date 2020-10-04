@@ -26,7 +26,7 @@
 ; Program name: "Sum of Array of Integers"
 ; Programming languages: One module in C, three modules in x86, one module in C++
 ; Date program began:	 2020-Sep-13
-; Date program completed: 2020-Sep-xx
+; Date program completed: 2020-Oct-03
 ; Files in program:	main.c, manager.asm, input_array.asm, sum.asm, display_array.cpp
 ; Status: Work in Progress
 ;
@@ -48,30 +48,24 @@
 ;Declare library functions called
 extern printf
 extern scanf
+extern malloc		; Used for allocating memory for arrays in heap space dynamically
 
-global circle
-
-segment .data
+global input_array
 
 ; -----
 ; Initialize data to be used
-
-welcomemsg db "This circle function is brought to you by Josh Ibad", 10, 0
-promptmsg db "Please enter the radius of a circle in whole number of meters: ", 0
+segment .data
 stringoutputformat db "%s", 0
-inputverifyformat db "The number %1d was received.", 10, 0
-signedintegerinputformat db "%ld", 0
-outputmsg db "The circumference of a circle with this radius is %ld and %d/7 meters.", 10, 0
-exitmsg db "The integer part of the area will be returned to the main program. Please enjoy your circles.", 10, 0
-errormsg db "Results are too large for a 64 bit integer.", 10, 0
-
-segment .bss
+longintformat db "%ld", 0
+invalidinputmsg db "Please enter a valid integer literal w/o extra characters (no decimal points).\nPress ENTER and CNTL+D to finish.", 10, 0
+errormsg db "Program was unable to properly allocate memory for the inputted array. Terminating...", 10, 0
 
 ; -----
 ; Empty segment
+segment .bss
 
 segment .text
-circle:
+input_array:
 
 ; -----
 ; Routine Prologue
@@ -94,99 +88,75 @@ push rbx
 pushf 
 push qword -1	;Push extra to even out offset to 16
 
+mov r15, rdi		; Store the address to store array address to nonvolatile register
+mov r14, rsi		; Store the address to store length to nonvolatile register
+xor r13, r13		; To be used as counter variable for length
+
+inputloopstart:
+	;Input signed long integer
+	mov qword rdi, longintformat
+	push qword -1
+	mov qword rsi, rsp
+	xor rax, rax
+	call scanf
+
+	cmp rax, 0
+	jg inputloopstart
+	jl inputloopend
+	;User input was invalid
+	pop qword r12		; Remove invalid input
+	mov qword rdi, stringoutputformat
+	mov qword rsi, invalidinputmsg
+	mov qword rax, 0
+	call printf
+	jmp inputloopstart
+
+inputloopend:
+pop qword r12		; Clean up stack
 ; -----
-; Output welcome message and prompt for inputs
-;Output welcome message
-mov qword rdi, stringoutputformat
-mov qword rsi, welcomemsg
-mov qword rax, 0
-call printf
+; Allocate heap space for the inputted array and populate with user input
+mov rax, r13
+mul 0x08
+mov rdi, rax
+xor rax, rax
+call malloc
 
-;Prompt for radius
-mov qword rdi, stringoutputformat	;Consider removing<RRR>
-mov qword rsi, promptmsg
-mov qword rax, 0					;Consider remove<RRR>
-call printf
+cmp rax, 0
+je errorhandling
+xor rcx, rcx
+copyloopstart:
+	cmp rcx, r13
+	jge copyloopend
+	pop rbx
+	mov [rax + 8*rdi], rbx
+	inc rcx
+	jmp copyloopstart
 
-;Input first integer
-mov qword rdi, signedintegerinputformat
-push qword -1						;WHY, Consider altering <RRR>
-mov qword rsi, rsp					;WHY, Consider altering <RRR>
-mov qword rax, 0
-call scanf
-pop qword r15	;Inputted radius integer
-
-;Output the input
-mov qword rdi, inputverifyformat
-mov rsi, r15
-mov qword rdx, r15					;WHY, Both rsi and rdx hold inputted value
-mov qword rax, 0
-call printf
-
-; -----
-; Calculations ----- Have yet to do;
-; Due to input being a distance, inputs and outputs are assumed to be positive
-; Circumfernce: C = 2r*22/7
-mov qword rax, 44
-mov qword rdx, 0
-mul r15
-
-cmp rdx, 0
-jne overflowerror
-
-mov qword r14, 7
-div r14
-
-;Output circumference
-mov qword rdi, inputverifyformat
-mov rsi, rax
-	;rdx already contains remainder
-mov qword rax, 0
-call printf
-
-
-; Area: A = r*r*22 / 7
-mov qword rax, r15
-mov qword rdx, 0
-mul r15
-
-cmp rdx, 0
-jne overflowerror
-
-mov qword r14, 22
-mul r14
-
-cmp rdx, 0
-jne overflowerror
-
-mov qword r14, 7
-div r14
-
-push rax	;Store area in stack
+copyloopend:
+mov [r14], r13
+mov [r15], rax
 jmp finale
 
-overflowerror:
+; -----
+; Error handling block
+; Prints error message and empties stack of values pushed by the function
+errorhandling:
 mov qword rdi, stringoutputformat
 mov qword rsi, errormsg
 mov qword rax, 0
 call printf
-mov rax, -1
-push rax
 
-; -----
-; Output final results and exit messages
-;Output exit message
+mov rcx, r13
+emptyloop:
+	pop rax
+	loop emptyloop
+
+xor rax, rax
+
 finale:
-mov qword rdi, stringoutputformat
-mov qword rsi, exitmsg
-mov qword rax, 0
-call printf
-
 ; -----
 ; Routine Epilogue
 ;Restore registers to original state
-pop rax		;Retrieve obtained area
-
 pop r8		;Remove extra -1 used to oven out offset, register is arbitrary
 popf
 pop rbx
