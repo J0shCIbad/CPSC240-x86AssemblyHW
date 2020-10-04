@@ -63,7 +63,7 @@ inputarraymsg db "Enter a sequence of long integers separated by white space.", 
 displayarraymsg db 10, "These %ld numbers were received and placed into the array", 10, 0
 sumoutputmsg db 10, "The sum of the %ld numbers in this array is %ld", 10, 0
 exitmsg db 10, "The sum will now be returned to the main function.", 10, 0
-errormsg db "Program was not able to create the array.", 10, 9"The program will now terminate", 10, 0
+errormsg db "Program was not able to create the array.", 10, 9, "The program will now terminate", 10, 0
 
 ; -----
 ; Empty segment
@@ -115,7 +115,6 @@ push qword -1
 mov rsi, rsp		; Address in stack in which to store array's length
 xor rax, rax
 call input_array
-
 pop qword r14		; r14 stores the array length
 pop qword r13		; r13 stores the array address
 
@@ -127,28 +126,28 @@ je errorhandling
 ; Print the corresponding message, then call the display_array module to list the
 ; contents of array for confirmation by the user.
 mov qword rdi, displayarraymsg
-mov qword rsi, [r14]		; Array length
+mov rsi, r14		; Array length
 mov qword rax, 0
 call printf
 
 ; Call display_array and feed in the address of the input array
-mov rdi, qword [r13]		; Array address
-mov rsi, qword [r14]		; Array length
+mov rdi, r13		; Array address
+mov rsi, r14		; Array length
 xor rax, rax
 call display_array
 
 ; -----
 ; 	Sum function
 ; Call sum function
-mov rdi, qword [r13]		; Array address
-mov rsi, qword [r14]		; Array length
+mov rdi, r13		; Array address
+mov rsi, r14		; Array length
 xor rax, rax
 call sum
 mov r15, rax
 ; Print results
 mov qword rdi, sumoutputmsg
-mov qword rsi, [r14]		; Array length
-mov qword rdx, rax
+mov rsi, r14		; Array length
+mov rdx, rax
 mov qword rax, 0
 call printf
 
