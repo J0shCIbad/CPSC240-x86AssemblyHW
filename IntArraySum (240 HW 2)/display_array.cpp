@@ -24,21 +24,22 @@
  * Program Name: "Sum of Array of Integers"
  * Programming Languages: One module in C, three modules in x86, one module in C++
  * Date program began:     2020-Sep-13
- * Date program completed: 2020-Oct-03
+ * Date program completed: 2020-Oct-04
  * Files in this program: main.c, manager.asm, input_array.asm, sum.asm, display_array.cpp
- * Status: Work in Progress
+ * Status: Complete (as of 2020-Oct-04).  No errors found after extensive testing.
  *
  * References:
  *	Jorgensen, x86-64 Assembly Language Programming w/ Ubuntu
  *
  * Purpose:
- *	Displays an array of integers. (To be used in program to confirm user input).
+ *	Displays an array of integers given the array address and length.
+ *	(To be used in program to confirm user input).
  *
  * This file:
  *	Filename: display_array.cpp
  *	Language: C++
- *	Compile:
- *	Link:
+ *	Compile: g++ -c -m64 -Wall -fno-pie -no-pie -o display_array.o display_array.cpp -std=c++17
+ *	Link: g++ -m64 -fno-pie -no-pie -o main.out -std=c++17 main.o manager.o input_array.o sum.o display_array.o 
  */
 
 #include <iostream>

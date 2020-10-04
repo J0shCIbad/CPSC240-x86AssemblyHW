@@ -26,21 +26,22 @@
 ; Program name: "Sum of Array of Integers"
 ; Programming languages: One module in C, three modules in x86, one module in C++
 ; Date program began:	 2020-Sep-13
-; Date program completed: 2020-Oct-03
+; Date program completed: 2020-Oct-04
 ; Files in program:	main.c, manager.asm, input_array.asm, sum.asm, display_array.cpp
-; Status: Work in Progress
+; Status: Complete (as of 2020-Oct-04).  No errors found after extensive testing.
 ;
 ;References:
 ; Jorgensen, x86-64 Assembly Language Programming w/ Ubuntu
 ; 
 ;Purpose:
-; Sums together an array of integers.
+; Sums together an array of integers given the array address and length.
+; Follows C Calling Conventions for Linux Systems.
 ;	
 ;This file:
 ; Filename: sum.asm
 ; Language: x86-64 (Intel)
-; Assemble: ...
-; Link: ...        ;Ref Jorgensen, page 226, "-no-pie"
+; Assemble: nasm -f elf64 -l sum.lis -o sum.o sum.asm
+; Link: g++ -m64 -fno-pie -no-pie -o main.out -std=c++17 main.o manager.o input_array.o sum.o display_array.o 
 ; **********************************************
 extern printf
 

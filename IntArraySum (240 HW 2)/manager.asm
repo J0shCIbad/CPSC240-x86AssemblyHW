@@ -26,22 +26,22 @@
 ; Program name: "Sum of Array of Integers"
 ; Programming languages: One module in C, three modules in x86, one module in C++
 ; Date program began:	 2020-Sep-13
-; Date program completed: 2020-Oct-03
+; Date program completed: 2020-Oct-04
 ; Files in program:	main.c, manager.asm, input_array.asm, sum.asm, display_array.cpp
-; Status: Work in Progress
+; Status: Complete (as of 2020-Oct-04).  No errors found after extensive testing.
 ;
 ;References:
 ; Jorgensen, x86-64 Assembly Language Programming w/ Ubuntu
 ; 
 ;Purpose:
-; Assembly module to manage calling functions from submodules and appropraitely transfer
-; data between functions and this manager module.
+; Assembly module to manage calling functions from submodules and appropriately transfer
+; data between functions and this manager module, displaying messages to show progress.
 ;	
 ;This file:
 ; Filename: manager.asm
 ; Language: x86-64 (Intel)
-; Assemble: ...
-; Link: ...        ;Ref Jorgensen, page 226, "-no-pie"
+; Assemble: nasm -f elf64 -l manager.lis -o manager.o manager.asm
+; Link: g++ -m64 -fno-pie -no-pie -o main.out -std=c++17 main.o manager.o input_array.o sum.o display_array.o 
 ; **********************************************
 
 
@@ -60,20 +60,10 @@ segment .data
 stringoutputformat db "%s", 0
 welcomemsg db "This program will sum your array of integers", 10, 0
 inputarraymsg db "Enter a sequence of long integers separated by white space.", 10, 09, "After the last input press ENTER followed by CNTL + D", 10, 0
-displayarraymsg db "\nThese %ld numbers were received and placed into the array", 10, 0
+displayarraymsg db 10, "These %ld numbers were received and placed into the array", 10, 0
 sumoutputmsg db 10, "The sum of the %ld numbers in this array is %ld", 10, 0
 exitmsg db 10, "The sum will now be returned to the main function.", 10, 0
-errormsg db "Program was not able to create the array.", 10, "The program will now terminate", 10, 0
-
-; The following variables are necessary to be consistent with standard calling 
-; 	convention. The input_array function will take in the memory addresses and alter 
-;	them to store the necessary values. The function then properly returns a nonzero
-;	value for proper memory allocation and a zero for when errors occur.
-; It would have been possible to use the stack or other registers, but that would not
-;	conform with standard calling convention and does not seem professional.
-; Default values of zero are given as sentinel values.
-arrayaddress dq 0
-arraylength dq 0
+errormsg db "Program was not able to create the array.", 10, 9"The program will now terminate", 10, 0
 
 ; -----
 ; Empty segment
@@ -119,10 +109,16 @@ mov qword rax, 0
 call printf
 
 ; Call input_array module to allow user to input an array of integers
-mov rdi, arrayaddress
-mov rsi, arraylength
+push qword -1
+mov rdi, rsp		; Address in stack in which to store array's address
+push qword -1
+mov rsi, rsp		; Address in stack in which to store array's length
 xor rax, rax
 call input_array
+
+pop qword r14		; r14 stores the array length
+pop qword r13		; r13 stores the array address
+
 cmp rax, 0
 je errorhandling
 
@@ -131,27 +127,27 @@ je errorhandling
 ; Print the corresponding message, then call the display_array module to list the
 ; contents of array for confirmation by the user.
 mov qword rdi, displayarraymsg
-mov qword rsi, [arraylength]
+mov qword rsi, [r14]		; Array length
 mov qword rax, 0
 call printf
 
 ; Call display_array and feed in the address of the input array
-mov rdi, qword [arrayaddress]
-mov rsi, qword [arraylength]
+mov rdi, qword [r13]		; Array address
+mov rsi, qword [r14]		; Array length
 xor rax, rax
 call display_array
 
 ; -----
 ; 	Sum function
 ; Call sum function
-mov rdi, qword [arrayaddress]
-mov rsi, qword [arraylength]
+mov rdi, qword [r13]		; Array address
+mov rsi, qword [r14]		; Array length
 xor rax, rax
 call sum
 mov r15, rax
 ; Print results
 mov qword rdi, sumoutputmsg
-mov qword rsi, [arraylength]
+mov qword rsi, [r14]		; Array length
 mov qword rdx, rax
 mov qword rax, 0
 call printf
