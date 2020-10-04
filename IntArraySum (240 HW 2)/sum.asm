@@ -90,7 +90,8 @@ push qword -1	;Push extra to even out offset to 16
 ; Perform (rsi = rsi*8 + rdi) to get final address in array
 xor rdx, rdx
 mov rax, rsi
-mul 0x08
+mov r10, 8
+mul r10
 mov rsi, rax
 add rsi, rdi
 jc invalidaddresserror
