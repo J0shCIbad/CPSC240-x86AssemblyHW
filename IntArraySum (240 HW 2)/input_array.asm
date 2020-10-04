@@ -120,14 +120,6 @@ inputloopstart:
 	pop qword r12
 	pop qword r12
 	
-	mov qword rdi, stringoutputformat
-	push qword -1
-	push qword -1
-	mov qword rsi, rsp
-	call scanf		; Flushes buffer of invalid input preventing infinite error loop
-	pop qword r12
-	pop qword r12
-	
 	mov rdi, stringoutputformat
 	mov rsi, invalidinputmsg
 	xor rax, rax

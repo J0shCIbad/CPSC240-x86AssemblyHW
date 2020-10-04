@@ -151,7 +151,7 @@ call sum
 mov r15, rax
 ; Print results
 mov qword rdi, sumoutputmsg
-mov qword rsi, arraylength
+mov qword rsi, [arraylength]
 mov qword rdx, rax
 mov qword rax, 0
 call printf
