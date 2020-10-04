@@ -1,4 +1,4 @@
-README for Sum of Array of Integers (HW2 for CSUF CPSC240-03, Floyd Holliday, Fall 2020)
+README for Sum of Array of Integers (HW2 for CSUF CPSC240-03, Floyd Holliday, Fall 2020) 
 Time-stamp: <2020-10-04 12:26:04 Josh Ibad>
 ------------------------------------------------------------
 	Program name: "Sum of Array of Integers" (HW 2 for CPSC 240-03, Fall 2020)
@@ -45,6 +45,8 @@ Time-stamp: <2020-10-04 12:26:04 Josh Ibad>
 		
 		display_array.cpp = Displays an array of integers given the array address 
 		and length. (To be used in program to confirm user input).
+		
+		r.sh = Bash script for assembling, compiling, and linking the program
 	
 	Status: Complete (as of 2020-Oct-04).  No errors found after extensive testing.
  

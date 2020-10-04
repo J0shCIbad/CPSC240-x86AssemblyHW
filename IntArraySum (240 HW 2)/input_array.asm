@@ -1,4 +1,4 @@
-; **********************************************
+; ********************************************** 
 ; Program Name: "Sum of Array of Integers" (HW 2 for CPSC 240-03, Fall 2020)
 ; Details: Prompts user to input an array of integers, repeats the array
 ; for confirmation, and computes the sum of the array of integers.

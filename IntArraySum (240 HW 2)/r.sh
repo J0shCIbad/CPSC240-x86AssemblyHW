@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 
 #Program: Sum of Array of Integers
 #Author: Josh Ibad
