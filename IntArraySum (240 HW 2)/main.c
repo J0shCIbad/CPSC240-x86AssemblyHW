@@ -51,8 +51,7 @@ int main(){
 	printf("%s\n%s\n\n", "Welcome to \"Sum of Array of Integers\".", "by: Josh Ibad");
 	long res = -1;
 	res = sumOfIntArray(); //Call to function
-	printf("%s%ld%s\n", "Main received integer: ", res, " as the sum of the array, \
-		and is not sure what to do with it.");
+	printf("%s%ld%s\n", "Main received integer: ", res, " as the sum of the array, and is not sure what to do with it.");
 	printf("%s\n%s\n", "Main will now return 0 to OS. Bye.", "---End of program---");
 	return 0;
 }

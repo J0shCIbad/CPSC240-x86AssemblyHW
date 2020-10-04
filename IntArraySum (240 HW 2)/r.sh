@@ -28,6 +28,7 @@ echo "Link the object files"
 g++ -m64 -fno-pie -no-pie -o main.out -std=c++17 main.o manager.o input_array.o sum.o display_array.o 
 
 echo "Run the program Sum of Array of Integers:"
+echo " "	#Blank line merely for appearances
 ./main.out
 
 echo "The script file will terminate"
