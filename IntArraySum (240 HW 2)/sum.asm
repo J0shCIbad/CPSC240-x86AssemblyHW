@@ -45,7 +45,6 @@
 
 
 ;Declare library functions called
-extern printf
 global sum
 
 ; -----
@@ -53,6 +52,7 @@ global sum
 segment .data
 stringoutputformat db "%s", 0
 errormsg db "Summation caused overflow over signed 64-bit integer. Hence, summation has been terminated", 10, 0
+invalidaddressmsg db "Invalid address or length provided. Terminating...", 10, 0
 
 ; -----
 ; Empty segment
@@ -86,18 +86,33 @@ push qword -1	;Push extra to even out offset to 16
 ; Sum loop
 ; rdi has been preserved, containing the address of the array
 ; rsi has been preserved, containig the length of the array
-xor rcx, rcx		; Zero out rcx, the loop counter
+
+; Perform (rsi = rsi*8 + rdi) to get final address in array
+xor rdx, rdx
+mov rax, rsi
+mul 0x08
+mov rsi, rax
+add rsi, rdi
+jc invalidaddresserror
 xor rax, rax		; Zero out rax, the sum accumulator variable 
 
 sumloop:
-cmp rcx, rdi
+cmp rdi, rsi
 jge sumloopexit
 add rax, qword [rdi]		
 jo overflowerror	; If overflow error met, jump out of loop and run
-					; error handling code.
+						; error handling code.
 add rdi, 8			; Increment the address by a long int's size (8 bytes)
-inc rcx				; Increment the counter register
-jmp sumloop
+						; Done here to avoid overhead from a "qword [rdi + rcx*8]"
+						; Multiplications are more expensive than additions
+jmp finale
+
+invalidaddresserror:		
+mov qword rdi, stringoutputformat
+mov qword rsi, invalidaddressmsg
+mov qword rax, 0
+call printf
+jmp finale
 
 overflowerror:		
 mov qword rdi, stringoutputformat
@@ -109,8 +124,9 @@ call printf
 ; to another eroneous value (all values in the domain are valid values, 
 ; no return value is available to be exclusively used for overflow errors)
 
-sumloopexit:		; Loop exit. Empty since no further processing required.
+; <REM> sumloopexit:		; Loop exit. Empty since no further processing required.
 
+finale:
 ; -----
 ; Routine Epilogue
 ; Restore registers to original state

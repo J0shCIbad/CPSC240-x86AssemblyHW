@@ -48,7 +48,7 @@ long int manager();
 #define sumOfIntArray() manager()
 
 int main(){
-	printf("%s\n%s\n", "Welcome to \"Sum of Array of Integers\".", "by: Josh Ibad");
+	printf("%s\n%s\n\n", "Welcome to \"Sum of Array of Integers\".", "by: Josh Ibad");
 	long res = -1;
 	res = sumOfIntArray(); //Call to function
 	printf("%s%ld%s\n", "Main received integer: ", res, " as the sum of the array, \
