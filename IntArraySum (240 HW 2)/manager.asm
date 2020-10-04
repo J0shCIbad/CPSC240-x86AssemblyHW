@@ -59,11 +59,11 @@ segment .data
 
 stringoutputformat db "%s", 0
 welcomemsg db "This program will sum your array of integers", 10, 0
-inputarraymsg db "Enter a sequence of long integers separated by white space.\nAfter the last input press ENTER followed by CNTL + D", 10, 0
+inputarraymsg db "Enter a sequence of long integers separated by white space.", 10, 09, "After the last input press ENTER followed by CNTL + D", 10, 0
 displayarraymsg db "\nThese %ld numbers were received and placed into the array", 10, 0
-sumoutputmsg db "\nThe sum of the %ld numbers in this array is %ld", 10, 0
-exitmsg db "\nThe sum will now be returned to the main function.", 10, 0
-errormsg db "Program was not able to create the array.\nThe program will now terminate", 10, 0
+sumoutputmsg db 10, "The sum of the %ld numbers in this array is %ld", 10, 0
+exitmsg db 10, "The sum will now be returned to the main function.", 10, 0
+errormsg db "Program was not able to create the array.", 10, "The program will now terminate", 10, 0
 
 ; The following variables are necessary to be consistent with standard calling 
 ; 	convention. The input_array function will take in the memory addresses and alter 

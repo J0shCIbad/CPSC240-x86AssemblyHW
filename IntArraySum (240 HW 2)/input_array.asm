@@ -57,7 +57,7 @@ global input_array
 segment .data
 stringoutputformat db "%s", 0
 longintformat db "%ld", 0
-invalidinputmsg db "Please enter a valid integer literal w/o extra characters (no decimal points).\nPress ENTER and CNTL+D to finish.", 10, 0
+invalidinputmsg db "Please enter a valid integer literal w/o extra characters (no decimal points).", 10, 9, "Press ENTER and CNTL+D to finish.", 10, 0
 errormsg db "Program was unable to properly allocate memory for the inputted array. Terminating...", 10, 0
 
 ; -----
