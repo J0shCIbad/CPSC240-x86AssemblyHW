@@ -1,5 +1,5 @@
 README for Bubble Sorting an Array of Integers (HW3 for CSUF CPSC240-03, Floyd Holliday, Fall 2020) 
-Time-stamp: <2020-10-04 12:26:04 Josh Ibad>
+Time-stamp: <2020-10-05 20:56:08 Josh Ibad>
 ------------------------------------------------------------
 	Program name: "Bubble Sorting an Array of Integers" (HW 3 for CPSC 240-03, Fall 2020)
 	Details: Prompts user to input an array of integers, repeats the array
@@ -29,7 +29,7 @@ Time-stamp: <2020-10-04 12:26:04 Josh Ibad>
 	Programming Languages: One module in C, two modules in C++, 
 		four modules in x86-64 Intel Assembly
 	Date program began:     2020-Oct-04
-	Date program completed: 2020-Oct-xx
+	Date program completed: 2020-Oct-05
 
 	Files in program:	main.cpp, read_clock.asm, manager.asm, display_array.cpp,
 		bubble_sort.c, swap.asm, input_array.asm.
@@ -67,7 +67,8 @@ Time-stamp: <2020-10-04 12:26:04 Josh Ibad>
 		
 		r.sh = Bash script for assembling, compiling, and linking the program
 	
-	Status: Under Development
+	Status: Completed (Finished as of 2020-Oct-05). Testing on Ubuntu 20.04, g++9.3.0 success.
+			Awaiting further details from instructor before submission, for details on including library functions.
  
 	References:
 		Jorgensen, x86-64 Assembly Language Programming w/ Ubuntu
@@ -96,7 +97,9 @@ Warnings:
 	* The program runs successfully.
 	
 	New warnings for HW 3:
-	* 
+	* Code was ran on Ubuntu 20.04, g++ v9.3.0. Running on a different Linux distro
+		may work, however, running an older version of g++ will cause the program to
+		fail. Code for older versions are commented in the program source code.
 	
 	Old warnings for modules used since HW 2:
 	* The program has been designed to dynamically allocate the array of inputs, hence

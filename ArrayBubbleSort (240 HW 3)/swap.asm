@@ -28,10 +28,10 @@
 ; Programming Languages: One module in C, two modules in C++, 
 ;	four modules in x86-64 Intel Assembly
 ; Date program began:     2020-Oct-04
-; Date program completed: 2020-Oct-xx
+; Date program completed: 2020-Oct-05
 ; Files in program:	main.cpp, read_clock.asm, manager.asm, display_array.cpp,
 ;	bubble_sort.c, swap.asm, input_array.asm.
-; Status: Under Development
+; Status: Completed (Finished as of 2020-Oct-05). Testing on Ubuntu 20.04, g++9.3.0 success.
 ;
 ;References:
 ; https://en.wikipedia.org/wiki/XOR_swap_algorithm
