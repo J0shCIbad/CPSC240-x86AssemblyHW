@@ -179,8 +179,8 @@ mov qword rsi, errormsg
 mov qword rax, 0
 call printf
 
-mov qword r13, 1	; Safe values for termination after error
-mov qword [r14], 0	; Safe values for termination after error
+mov qword r14, 1	; Safe values for termination after error
+mov qword [r13], 0	; Safe values for termination after error
 ; -----
 ; Final blocks of code. Prints final messages, restores former state, preps return val.
 finale:
@@ -189,7 +189,7 @@ mov qword rsi, exitmsg
 mov qword rax, 0
 call printf
 
-mov rax, qword [r14 + 8*r13 - 8]	;Access last element of array (the max)
+mov rax, qword [r13 + 8*r14 - 8]	;Access last element of array (the max)
 ; -----
 ; Routine Epilogue
 ;Restore registers to original state
