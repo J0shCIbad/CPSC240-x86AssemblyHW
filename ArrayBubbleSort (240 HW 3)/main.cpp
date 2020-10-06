@@ -50,8 +50,8 @@
 #include <iostream>
 //#include <stdio.h> - For g++8 and below
 
-extern long int manager();
-extern long int read_clock();
+extern "C" long int manager();
+extern "C" long int read_clock();
 #define sortArray() manager()
 
 int main(){
