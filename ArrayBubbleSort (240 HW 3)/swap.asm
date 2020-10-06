@@ -68,21 +68,27 @@ swap:
 ; Other pushes and pops removed to maximize speed of execution.
 push rbp
 mov  rbp,rsp
+push r15
 pushf 
+push qword -1			; Push extra to even out to 4 pushes
 
 ; ---
 ; rdi contains the address to the first operand
 ; rsi contains the address to the second opeand
 ; XOR Swap algorithm found in https://en.wikipedia.org/wiki/XOR_swap_algorithm
 
-xor qword [rdi], qword [rsi]	; rdi = rdi XOR rsi
-xor qword [rsi], qword [rdi]	; rsi = rsi XOR rdi
-xor qword [rdi], qword [rsi]	; rdi = rdi XOR rsi 
+mov r15, qword[rdi]
+xor r15, qword [rsi]	; rdi = rdi XOR rsi
+xor qword [rsi], r15	; rsi = rsi XOR rdi
+xor r15, qword [rsi]	; rdi = rdi XOR rsi 
+mov qword [rdi], r15
 
 ; -----
 ; Routine Epilogue
 ; Restore registers to original state
+pop r15			;Arbitrary register chosen to pop extra value
 popf
+pop r15
 pop rbp
 ret
 

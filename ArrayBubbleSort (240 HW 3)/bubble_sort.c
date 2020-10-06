@@ -56,13 +56,13 @@ extern "C" void bubble_sort(long int *, long int);
 
 void swap(long int * addr1, long int * addr2);		// Written in x86 as swap.asm
 void bubble_sort(long int * arr, long int len){
-	bool dirtyBit = true;	//Will denote if swaps occured in iteration
+	char dirtyBit = 1;	//Will denote if swaps occured in iteration
 	while(dirtyBit){		//Executes while swap occurs
-		dirtyBit = false;
+		dirtyBit = 0;
 		for(int i=0; i<len-1; i++){
 			if(arr[i] > arr[i+1]){
 				swap(arr+i, arr+i+1);
-				dirtyBit = true;
+				dirtyBit = 1;
 			}
 		}
 	}
