@@ -52,7 +52,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-extern "C" void bubble_sort(long int *, long int);
+extern void bubble_sort(long int *, long int);
 
 void swap(long int * addr1, long int * addr2);		// Written in x86 as swap.asm
 void bubble_sort(long int * arr, long int len){
