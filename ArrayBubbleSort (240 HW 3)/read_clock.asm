@@ -34,8 +34,8 @@
 ; Status: Under Development
 ;
 ;References:
-; https://c9x.me/x86/html/file_module_x86_id_278.html
-; https://www.intel.com/content/www/us/en/embedded/training/ia-32-ia-64-benchmark-code-execution-paper.html
+; https://stackoverflow.com/questions/19555121/how-to-get-current-timestamp-in-milliseconds-since-1970-just-the-way-java-gets
+;	- The C code is used as a reference for writing assembly x86 counterpart
 ; 
 ;Purpose:
 ; Returns the number of ticks as calculated by the machine.
@@ -47,6 +47,7 @@
 ; Link: g++ -m64 -fno-pie -no-pie -o main.out -std=c++17 main.o read_clock.o manager.o input_array.o display_array.o bubble_sort.o swap.o
 ; **********************************************
 
+extern clock_gettime
 global read_clock
 
 ; -----
@@ -67,27 +68,39 @@ read_clock:
 ; from the pushing and popping.
 push rbp
 mov  rbp,rsp
-push rdx
+push rdi
+push rsi
 push rcx
+push rdx
+push r14
+push r15
 pushf 
 
-xor rax, rax
-xor rdx, rdx	
-rdtscp			; "Read Time-Stamp Counter and Processor ID" instruction,
-				; reads time stamp to EDX:EAX and Processor ID to ECX
+mov rdi, qword 0
+mov rdi, dword 4	; 32-bit value of 4 denotes CLOCK_MONOTONIC_RAW
+push qword 0
+push qword 0
+mov rsi, rsp		; Address of 16-bytes of memory for struct timespec
+call clock_gettime
 
-rol rdx, 32		; Bitwise shift left of rdx by 32 bits
-				; Since the higher bits of rdx have been cleared to zero, the
-				; rotation ensures that the highest 32 bits contains the contents 
-				; of EDX, and the lower 32 bits contains 0's
-and rax, rdx	; And to gain one full 64 bit register containing EDX:EAX
+pop qword rax		; rax contains seconds
+pop qword r15		; r15 contains miliseconds
+
+cqo
+mov qword r14, 1000000
+mul r14
+add rax, r15
 
 ; -----
 ; Routine Epilogue
 ; Restore registers to original state
 popf
-pop rcx
+pop r15
+pop r14
 pop rdx
+pop rcx
+pop rsi
+pop rdi
 pop rbp
 
 ret
