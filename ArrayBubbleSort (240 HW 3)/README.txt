@@ -1,9 +1,10 @@
-README for Sum of Array of Integers (HW2 for CSUF CPSC240-03, Floyd Holliday, Fall 2020) 
+README for Bubble Sorting an Array of Integers (HW3 for CSUF CPSC240-03, Floyd Holliday, Fall 2020) 
 Time-stamp: <2020-10-04 12:26:04 Josh Ibad>
 ------------------------------------------------------------
-	Program name: "Sum of Array of Integers" (HW 2 for CPSC 240-03, Fall 2020)
-	Details: Calculates the integer circumference and area of a circle given
-	its integer radius, using the egyptian estimation of pi.
+	Program name: "Bubble Sorting an Array of Integers" (HW 3 for CPSC 240-03, Fall 2020)
+	Details: Prompts user to input an array of integers, repeats the array
+	for confirmation, and sorts the array. Ticks at the beginning and end of
+	execution are also displayed.
 	Copyright (C) 2020  Josh Ibad
 
 	This program is free software: you can redistribute it and/or modify
@@ -23,57 +24,81 @@ Time-stamp: <2020-10-04 12:26:04 Josh Ibad>
 
 	Program Name: "Sum of Array of Integers"
 	Purpose: Prompts user to input an array of integers, repeats the array
-	for confirmation, and computes the sum of the array of integers.
-	Programming Languages: One module in C, three modules in x86, one module in C++
-	Date program began:     2020-Sep-13
-	Date program completed: 2020-Oct-04
+	for confirmation, and sorts the array. Tics at the beginning and end of
+	execution are also displayed.
+	Programming Languages: One module in C, two modules in C++, 
+		four modules in x86-64 Intel Assembly
+	Date program began:     2020-Oct-04
+	Date program completed: 2020-Oct-xx
 
-	Files in this program: main.c, manager.asm, input_array.asm, sum.asm, display_array.cpp
-		main.c	= A C driver module to call the x86-64 assembly program of "manager.asm"
-		and show the value received from the function call.
+	Files in program:	main.cpp, read_clock.asm, manager.asm, display_array.cpp,
+		bubble_sort.c, swap.asm, input_array.asm.
+		
+		main.cpp = A C++ Driver module for the program. Calls the read_clock.asm 
+			module to print the ticks in the beginning of execution and after it.
+			Also prints welcome messages, calls the manager.asm module to execute 
+			the majority of the program's code, then prints the obtained values and
+			the exit messages.
+		
+		read_clock.asm = Returns the number of ticks as calculated by the machine.
 		
 		manager.asm = Assembly module to manage calling functions from submodules and
-		appropriately transfer data between functions and this manager module, 
-		displaying messages to show progress.
-		
-		input_array.asm = Assembly module for gathering user input and creating an 
-		array of integers. Will detect and handle invalid inputs. Stops taking input
-		with ENTER, CNTL + D. Follows C Calling Conventions for Linux Systems.
-		
-		sum.asm = Sums together an array of integers given the array address and 
-		length. Follows C Calling Conventions for Linux Systems.
+			appropriately transfer data between functions and this manager module, 
+			displaying messages to show progress.
 		
 		display_array.cpp = Displays an array of integers given the array address 
-		and length. (To be used in program to confirm user input).
+			and length. (To be used in program to confirm user input).
+		
+		bubble_sort.c = A C module for sorting an array using the bubble sort 
+			algorithm, given the array's address and length. The bubble sort 
+			algorithm will, for each iteration, check each consecutive elements in 
+			the array and swap them if they are out of order. The algorithm executes
+			when no swaps occur during an iteration (detected using a dirty bit). As
+			swaps are the most time consuming operation of the algorithm, swapping is
+			deferred to an assembly program called swap.asm. 
+		
+		swap.asm = Swaps the values stored in two memory addresses.
+			(Aids in bubble sort)
+		
+		input_array.asm = Assembly module for gathering user input and creating an 
+			array of integers. Will detect and handle invalid inputs. Stops taking
+			input with ENTER, CNTL + D. Follows C Calling Conventions for Linux 
+			Systems.
 		
 		r.sh = Bash script for assembling, compiling, and linking the program
 	
-	Status: Complete (as of 2020-Oct-04).  No errors found after extensive testing.
+	Status: Under Development
  
 	References:
 		Jorgensen, x86-64 Assembly Language Programming w/ Ubuntu
 		
 Compilation and Execution instructions:
-	Assemble:	nasm -f elf64 -l input_array.lis -o input_array.o input_array.asm
-				nasm -f elf64 -l sum.lis -o sum.o sum.asm
+	Assemble:	nasm -f elf64 -l read_clock.lis -o read_clock.o read_clock.asm
 				nasm -f elf64 -l manager.lis -o manager.o manager.asm
+				nasm -f elf64 -l input_array.lis -o input_array.o input_array.asm
+				nasm -f elf64 -l swap.lis -o swap.o swap.asm
 				
-	Compile: 	g++ -c -m64 -Wall -fno-pie -no-pie -o display_array.o display_array.cpp -std=c++17
-				gcc -c -Wall -m64 -no-pie -o main.o main.c -std=c11
+	Compile: 	gcc -c -Wall -m64 -no-pie -o bubble_sort.o bubble_sort.c -std=c11
+				g++ -c -m64 -Wall -fno-pie -no-pie -o main.o main.cpp -std=c++17
+				g++ -c -m64 -Wall -fno-pie -no-pie -o display_array.o display_array.cpp -std=c++17
 	
-	Link: 		g++ -m64 -fno-pie -no-pie -o main.out -std=c++17 main.o manager.o input_array.o sum.o display_array.o 
+	Link: 		g++ -m64 -fno-pie -no-pie -o main.out -std=c++17 main.o read_clock.o manager.o input_array.o display_array.o bubble_sort.o swap.o
 
 	Run:		./main.out
 
 Warnings:
-	* The modules manager.asm, input_array.asm, and sum.asm contains PIC 
-		non-compliant code.
+	* The modules read_clock.asm, manager.asm, input_array.asm, and swap.asm contains 
+		PIC non-compliant code.
 	* The assembler outputs a non-compliant object file.
 	* The C compiler is directed to create a non-compliant object file.
 	* The linker received a parameter telling the linker to expect 
 		non-compliant object files, and to output a non-compliant executable.
 	* The program runs successfully.
 	
+	New warnings for HW 3:
+	* 
+	
+	Old warnings for modules used since HW 2:
 	* The program has been designed to dynamically allocate the array of inputs, hence
 		the program's limits for user input are defined by the available primary
 		memory, specifically, a bit less than half of the availalbe primary memory not

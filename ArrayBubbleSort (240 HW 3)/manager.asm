@@ -1,7 +1,8 @@
 ; ********************************************** 
-; Program Name: "Sum of Array of Integers" (HW 2 for CPSC 240-03, Fall 2020)
+; Program Name: "Bubble Sorting an Array of Integers" (HW 3 for CPSC 240-03, Fall 2020)
 ; Details: Prompts user to input an array of integers, repeats the array
-; for confirmation, and computes the sum of the array of integers.
+; for confirmation, and sorts the array. Ticks at the beginning and end of
+; execution are also displayed.
 ; Copyright (C) 2020  Josh Ibad
 ;
 ; This program is free software: you can redistribute it and/or modify
@@ -23,25 +24,28 @@
 ; Author email: ibadecoder@gmail.com
 ;
 ;Program info:
-; Program name: "Sum of Array of Integers"
-; Programming languages: One module in C, three modules in x86, one module in C++
-; Date program began:	 2020-Sep-13
-; Date program completed: 2020-Oct-04
-; Files in program:	main.c, manager.asm, input_array.asm, sum.asm, display_array.cpp
-; Status: Complete (as of 2020-Oct-04).  No errors found after extensive testing.
+; Program name: "Bubble Sorting an Array of Integers"
+; Programming Languages: One module in C, two modules in C++, 
+;	four modules in x86-64 Intel Assembly
+; Date program began:     2020-Oct-04
+; Date program completed: 2020-Oct-xx
+; Files in program:	main.cpp, read_clock.asm, manager.asm, display_array.cpp,
+;	bubble_sort.c, swap.asm, input_array.asm.
+; Status: Under Development
 ;
 ;References:
 ; Jorgensen, x86-64 Assembly Language Programming w/ Ubuntu
 ; 
 ;Purpose:
-; Assembly module to manage calling functions from submodules and appropriately transfer
-; data between functions and this manager module, displaying messages to show progress.
+; Assembly module to manage calling functions from submodules and appropriately
+; transfer data between functions and this manager module, displaying messages to 
+; show progress.
 ;	
 ;This file:
 ; Filename: manager.asm
 ; Language: x86-64 (Intel)
 ; Assemble: nasm -f elf64 -l manager.lis -o manager.o manager.asm
-; Link: g++ -m64 -fno-pie -no-pie -o main.out -std=c++17 main.o manager.o input_array.o sum.o display_array.o 
+; Link: g++ -m64 -fno-pie -no-pie -o main.out -std=c++17 main.o read_clock.o manager.o input_array.o display_array.o bubble_sort.o swap.o
 ; **********************************************
 
 
@@ -49,7 +53,7 @@
 extern printf
 extern input_array
 extern display_array
-extern sum
+extern bubble_sort
 
 global manager
 
@@ -61,8 +65,9 @@ stringoutputformat db "%s", 0
 welcomemsg db "This program will sum your array of integers", 10, 0
 inputarraymsg db "Enter a sequence of long integers separated by white space.", 10, 09, "After the last input press ENTER followed by CNTL + D", 10, 0
 displayarraymsg db 10, "These %ld numbers were received and placed into the array", 10, 0
-sumoutputmsg db 10, "The sum of the %ld numbers in this array is %ld", 10, 0
-exitmsg db 10, "The sum will now be returned to the main function.", 10, 0
+sortmsg db 10, "The array has been sorted by the bubble sort algorithm.", 10, 0
+displaysortedarraymsg db 10, "This is the order of the values in the array now:", 10, 0
+exitmsg db 10, "The largest number will now be returned to the main function.", 10, 0
 errormsg db "Program was not able to create the array.", 10, 9, "The program will now terminate", 10, 0
 
 ; -----
@@ -137,21 +142,34 @@ xor rax, rax
 call display_array
 
 ; -----
-; 	Sum function
-; Call sum function
+; Sort array
+mov qword rdi, stringoutputformat
+mov qword rsi, sortmsg
+xor rax, rax
+call printf
+
+; Sort the array by calling the bubble_sort module
 mov rdi, r13		; Array address
 mov rsi, r14		; Array length
 xor rax, rax
-call sum
-mov r15, rax
-; Print results
-mov qword rdi, sumoutputmsg
-mov rsi, r14		; Array length
-mov rdx, rax
+call bubble_sort
+
+; -----
+; 	Display sorted array.
+; Print the corresponding message, then call the display_array module to list the
+; contents of the sorted array.
+mov qword rdi, stringoutputformat
+mov qword rsi, displaysortedarraymsg
 mov qword rax, 0
 call printf
 
-jmp finale
+; Call display_array and feed in the address of the input array
+mov rdi, r13		; Array address
+mov rsi, r14		; Array length
+xor rax, rax
+call display_array
+
+jmp success
 
 ; -----
 ; Error handling block to print error message if memory allocation failed
@@ -160,6 +178,10 @@ mov qword rdi, stringoutputformat
 mov qword rsi, errormsg
 mov qword rax, 0
 call printf
+jmp finale:
+
+success:
+
 
 ; -----
 ; Final blocks of code. Prints final messages, restores former state, preps return val.
@@ -169,7 +191,7 @@ mov qword rsi, exitmsg
 mov qword rax, 0
 call printf
 
-mov rax, r15
+mov rax, qword [r14 + 8*r13 - 8]	;Access last element of array (the max)
 ; -----
 ; Routine Epilogue
 ;Restore registers to original state

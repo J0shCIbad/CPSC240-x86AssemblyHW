@@ -1,7 +1,8 @@
 ; ********************************************** 
-; Program Name: "Sum of Array of Integers" (HW 2 for CPSC 240-03, Fall 2020)
+; Program Name: "Bubble Sorting an Array of Integers" (HW 3 for CPSC 240-03, Fall 2020)
 ; Details: Prompts user to input an array of integers, repeats the array
-; for confirmation, and computes the sum of the array of integers.
+; for confirmation, and sorts the array. Ticks at the beginning and end of
+; execution are also displayed.
 ; Copyright (C) 2020  Josh Ibad
 ;
 ; This program is free software: you can redistribute it and/or modify
@@ -23,12 +24,14 @@
 ; Author email: ibadecoder@gmail.com
 ;
 ;Program info:
-; Program name: "Sum of Array of Integers"
-; Programming languages: One module in C, three modules in x86, one module in C++
-; Date program began:	 2020-Sep-13
-; Date program completed: 2020-Oct-04
-; Files in program:	main.c, manager.asm, input_array.asm, sum.asm, display_array.cpp
-; Status: Complete (as of 2020-Oct-04).  No errors found after extensive testing.
+; Program name: "Bubble Sorting an Array of Integers"
+; Programming Languages: One module in C, two modules in C++, 
+;	four modules in x86-64 Intel Assembly
+; Date program began:     2020-Oct-04
+; Date program completed: 2020-Oct-xx
+; Files in program:	main.cpp, read_clock.asm, manager.asm, display_array.cpp,
+;	bubble_sort.c, swap.asm, input_array.asm.
+; Status: Under Development
 ;
 ;References:
 ; Jorgensen, x86-64 Assembly Language Programming w/ Ubuntu
@@ -42,7 +45,7 @@
 ; Filename: input_array.asm
 ; Language: x86-64 (Intel)
 ; Assemble: nasm -f elf64 -l input_array.lis -o input_array.o input_array.asm
-; Link: g++ -m64 -fno-pie -no-pie -o main.out -std=c++17 main.o manager.o input_array.o sum.o display_array.o 
+; Link: g++ -m64 -fno-pie -no-pie -o main.out -std=c++17 main.o read_clock.o manager.o input_array.o display_array.o bubble_sort.o swap.o
 ; **********************************************
 
 
