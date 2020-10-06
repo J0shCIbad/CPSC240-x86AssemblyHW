@@ -169,7 +169,7 @@ mov rsi, r14		; Array length
 xor rax, rax
 call display_array
 
-jmp success
+jmp finale
 
 ; -----
 ; Error handling block to print error message if memory allocation failed
@@ -178,11 +178,9 @@ mov qword rdi, stringoutputformat
 mov qword rsi, errormsg
 mov qword rax, 0
 call printf
-jmp finale:
 
-success:
-
-
+mov qword r13, 1	; Safe values for termination after error
+mov qword [r14], 0	; Safe values for termination after error
 ; -----
 ; Final blocks of code. Prints final messages, restores former state, preps return val.
 finale:
