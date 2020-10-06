@@ -35,6 +35,7 @@
 ;
 ;References:
 ; https://c9x.me/x86/html/file_module_x86_id_278.html
+; https://www.intel.com/content/www/us/en/embedded/training/ia-32-ia-64-benchmark-code-execution-paper.html
 ; 
 ;Purpose:
 ; Returns the number of ticks as calculated by the machine.
@@ -67,12 +68,13 @@ read_clock:
 push rbp
 mov  rbp,rsp
 push rdx
+push rcx
 pushf 
-push qword -1	;Push extra to even out offset to 4
 
 xor rax, rax
 xor rdx, rdx	
-rdtsc			; "Read Time-Stamp Counter" instruction, reads to EDX:EAX
+rdtscp			; "Read Time-Stamp Counter and Processor ID" instruction,
+				; reads time stamp to EDX:EAX and Processor ID to ECX
 
 rol rdx, 32		; Bitwise shift left of rdx by 32 bits
 				; Since the higher bits of rdx have been cleared to zero, the
@@ -83,8 +85,8 @@ and rax, rdx	; And to gain one full 64 bit register containing EDX:EAX
 ; -----
 ; Routine Epilogue
 ; Restore registers to original state
-pop rdx		;Remove extra -1 used to oven out offset, register is arbitrary
 popf
+pop rcx
 pop rdx
 pop rbp
 
