@@ -1,0 +1,237 @@
+     1                                  ; **********************************************
+     2                                  ; Program name: "Circumference of Circle" (HW 4 for CPSC 240-03, Fall 2020)
+     3                                  ; Details: Calculates the integer circumference and area of a circle given
+     4                                  ; its integer radius, using the egyptian estimation of pi.
+     5                                  ; Copyright (C) 2020  Josh Ibad
+     6                                  ;
+     7                                  ; This program is free software: you can redistribute it and/or modify
+     8                                  ; it under the terms of the GNU General Public License version 3 as 
+     9                                  ; published by the Free Software Foundation.
+    10                                  
+    11                                  ; This program is distributed in the hope that it will be useful,
+    12                                  ; but WITHOUT ANY WARRANTY; without even the implied warranty of
+    13                                  ; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    14                                  ; GNU General Public License for more details.
+    15                                  
+    16                                  ; A copy of the GNU General Public License v3 is available here:
+    17                                  ; <https://gnu.org/licenses/>
+    18                                  ; **********************************************
+    19                                  
+    20                                  ; **********************************************
+    21                                  ;Author info:
+    22                                  ; Author name: Josh Ibad
+    23                                  ; Author email: ibadecoder@gmail.com
+    24                                  ;
+    25                                  ;Program info:
+    26                                  ; Program name: Circumference of Circle
+    27                                  ; Programming languages: One module in C, one in x86
+    28                                  ; Date program began:	 2020-Oct-30
+    29                                  ; Date program completed: 2020-Oct-30
+    30                                  ; Files in program:	circumference.c, circle.asm
+    31                                  ; Status: Complete (as of 2020-10-30).  No errors found after extensive testing.
+    32                                  ;
+    33                                  ;References:
+    34                                  ; Jorgensen, x86-64 Assembly Language Programming w/ Ubuntu
+    35                                  ; Holliday, Floyd	- arithmeticSample.asm 
+    36                                  ;	(https://sites.google.com/a/fullerton.edu/activeprofessor/open-source-info/x86-assembly/x86-examples/integer-arithmetic)
+    37                                  ;
+    38                                  ;Purpose:
+    39                                  ; Calculate a circumference of a circle given a radius using double float arithmetic.
+    40                                  ;	
+    41                                  ;This file:
+    42                                  ; Filename: circle.asm
+    43                                  ; Language: x86-64 (Intel)
+    44                                  ; Assemble: nasm -f elf64 -l circle.lis -o circle.o circle.asm
+    45                                  ; Link: gcc -m64 -no-pie -o egyptian.out -std=c11 circumference.o circle.o        ;Ref Jorgensen, page 226, "-no-pie"
+    46                                  ; **********************************************
+    47                                  
+    48                                  
+    49                                  ;Declare library functions called
+    50                                  extern printf
+    51                                  extern scanf
+    52                                  
+    53                                  global circle
+    54                                  
+    55                                  segment .data
+    56                                  
+    57                                  ; -----
+    58                                  ; Initialize data to be used
+    59                                  
+    60 00000000 546869732063697263-     welcomemsg db "This circle function is brought to you by Josh Ibad, CPSC 240 - 03", 10, 0
+    60 00000009 6C652066756E637469-
+    60 00000012 6F6E2069732062726F-
+    60 0000001B 7567687420746F2079-
+    60 00000024 6F75206279204A6F73-
+    60 0000002D 6820496261642C2043-
+    60 00000036 50534320323430202D-
+    60 0000003F 2030330A00         
+    61 00000044 506C6561736520656E-     promptmsg db "Please enter the radius of a circle as a floating point number: ", 0
+    61 0000004D 746572207468652072-
+    61 00000056 6164697573206F6620-
+    61 0000005F 6120636972636C6520-
+    61 00000068 6173206120666C6F61-
+    61 00000071 74696E6720706F696E-
+    61 0000007A 74206E756D6265723A-
+    61 00000083 2000               
+    62 00000085 257300                  stringoutputformat db "%s", 0
+    63 00000088 546865206E756D6265-     inputverifyformat db "The number %lf was received.", 10, 0
+    63 00000091 7220256C6620776173-
+    63 0000009A 207265636569766564-
+    63 000000A3 2E0A00             
+    64 000000A6 256C6600                doublefloatformat db "%lf", 0
+    65 000000AA 546865206369726375-     outputmsg db "The circumference of a circle with this radius is %lf meters.", 10, 0
+    65 000000B3 6D666572656E636520-
+    65 000000BC 6F6620612063697263-
+    65 000000C5 6C6520776974682074-
+    65 000000CE 686973207261646975-
+    65 000000D7 7320697320256C6620-
+    65 000000E0 6D65746572732E0A00 
+    66 000000E9 546865206369726375-     exitmsg db "The circumference will be returned to the main program. Please enjoy your circles.", 10, 0
+    66 000000F2 6D666572656E636520-
+    66 000000FB 77696C6C2062652072-
+    66 00000104 657475726E65642074-
+    66 0000010D 6F20746865206D6169-
+    66 00000116 6E2070726F6772616D-
+    66 0000011F 2E20506C6561736520-
+    66 00000128 656E6A6F7920796F75-
+    66 00000131 7220636972636C6573-
+    66 0000013A 2E0A00             
+    67                                  
+    68 0000013D 182D4454FB210940        pi dq 0x400921fb54442d18 ;Obtained from C definition of pi in decimal, converted with calculator to hex
+    69                                  
+    70                                  segment .bss
+    71                                  
+    72                                  ; -----
+    73                                  ; Empty segment
+    74                                  
+    75                                  segment .text
+    76                                  circle:
+    77                                  
+    78                                  ; -----
+    79                                  ; Routine Prologue
+    80                                  ;Back up registers to stack to preserve register data
+    81 00000000 55                      push rbp
+    82 00000001 4889E5                  mov  rbp,rsp
+    83 00000004 57                      push rdi
+    84 00000005 56                      push rsi
+    85 00000006 51                      push rcx
+    86 00000007 52                      push rdx
+    87 00000008 4150                    push r8
+    88 0000000A 4151                    push r9
+    89 0000000C 4152                    push r10
+    90 0000000E 4153                    push r11
+    91 00000010 4154                    push r12
+    92 00000012 4155                    push r13
+    93 00000014 4156                    push r14
+    94 00000016 4157                    push r15
+    95 00000018 53                      push rbx
+    96 00000019 9C                      pushf 
+    97 0000001A 6AFF                    push qword -1	;Push extra to even out offset to 16
+    98                                  
+    99 0000001C 4883EC10                sub rsp, 16
+   100 00000020 F30F7F0424              movdqu oword [rsp], xmm0
+   101                                  
+   102 00000025 4883EC10                sub rsp, 16
+   103 00000029 F30F7F0C24              movdqu oword [rsp], xmm1
+   104                                  
+   105                                  ; -----
+   106                                  ; Output welcome message and prompt for inputs
+   107                                  ;Output welcome message
+   108 0000002E 48BF-                   mov qword rdi, stringoutputformat
+   108 00000030 [8500000000000000] 
+   109 00000038 48BE-                   mov qword rsi, welcomemsg
+   109 0000003A [0000000000000000] 
+   110 00000042 B800000000              mov qword rax, 0
+   111 00000047 E8(00000000)            call printf
+   112                                  
+   113                                  ;Prompt for radius
+   114 0000004C 48BF-                   mov qword rdi, stringoutputformat
+   114 0000004E [8500000000000000] 
+   115 00000056 48BE-                   mov qword rsi, promptmsg
+   115 00000058 [4400000000000000] 
+   116 00000060 B800000000              mov qword rax, 0
+   117 00000065 E8(00000000)            call printf
+   118                                  
+   119                                  
+   120                                  ;Input radius as double float
+   121 0000006A 48BF-                   mov qword rdi, doublefloatformat
+   121 0000006C [A600000000000000] 
+   122 00000074 6A00                    push qword 0	;Allocated stack memory to place scanned data into
+   123 00000076 4889E6                  mov qword rsi, rsp
+   124 00000079 B800000000              mov qword rax, 0
+   125 0000007E E8(00000000)            call scanf
+   126 00000083 F20F100424              movsd xmm0, [rsp]
+   127                                  
+   128                                  ;Output the input
+   129 00000088 B801000000              mov rax, 1
+   130 0000008D 48BF-                   mov qword rdi, inputverifyformat
+   130 0000008F [8800000000000000] 
+   131 00000097 E8(00000000)            call printf
+   132                                  
+   133                                  ; -----
+   134                                  ; Calculations
+   135                                  ; Due to input being a distance, inputs and outputs are assumed to be positive
+   136                                  ; Circumfernce: C = 2*pi*r
+   137 0000009C B802000000              mov qword rax, 2
+   138 000000A1 F2480F2AC8              cvtsi2sd xmm1, rax
+   139 000000A6 F20F59C1                mulsd xmm0, xmm1
+   140                                  
+   141 000000AA F20F100C25-             movsd xmm1, qword [pi]
+   141 000000AF [3D010000]         
+   142 000000B3 F20F59C1                mulsd xmm0, xmm1
+   143                                  
+   144                                  ;Output circumference
+   145 000000B7 B801000000              mov qword rax, 1
+   146 000000BC 48BF-                   mov qword rdi, outputmsg
+   146 000000BE [AA00000000000000] 
+   147 000000C6 E8(00000000)            call printf
+   148                                  
+   149 000000CB 4883EC10                sub rsp, 16
+   150 000000CF F30F7F0424              movdqu oword [rsp], xmm0
+   151                                  
+   152                                  ; -----
+   153                                  ; Output final results and exit messages
+   154                                  ;Output exit message
+   155                                  finale:
+   156 000000D4 48BF-                   mov qword rdi, stringoutputformat
+   156 000000D6 [8500000000000000] 
+   157 000000DE 48BE-                   mov qword rsi, exitmsg
+   157 000000E0 [E900000000000000] 
+   158 000000E8 B800000000              mov qword rax, 0
+   159 000000ED E8(00000000)            call printf
+   160                                  
+   161                                  ; -----
+   162                                  ; Routine Epilogue
+   163                                  ;Restore registers to original state
+   164 000000F2 4158                    pop qword r8		;Remove extra padding from pushing 128 bit xmm register
+   165                                  
+   166 000000F4 F30F6F0C24              movdqu xmm1, oword [rsp]
+   167 000000F9 4883C410                add rsp, 16
+   168                                  
+   169 000000FD F30F6F0424              movdqu xmm0, oword [rsp]
+   170 00000102 4883C410                add rsp, 16
+   171                                  
+   172 00000106 4158                    pop r8		;Remove extra -1 used to oven out offset, register is arbitrary
+   173 00000108 9D                      popf
+   174 00000109 5B                      pop rbx
+   175 0000010A 415F                    pop r15
+   176 0000010C 415E                    pop r14
+   177 0000010E 415D                    pop r13
+   178 00000110 415C                    pop r12
+   179 00000112 415B                    pop r11
+   180 00000114 415A                    pop r10
+   181 00000116 4159                    pop r9
+   182 00000118 4158                    pop r8
+   183 0000011A 5A                      pop rdx
+   184 0000011B 59                      pop rcx
+   185 0000011C 5E                      pop rsi
+   186 0000011D 5F                      pop rdi
+   187 0000011E 5D                      pop rbp
+   188                                  
+   189 0000011F C3                      ret
+   190                                  
+   191                                  
+   192                                  
+   193                                  
+   194                                  
+   195                                  
