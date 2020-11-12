@@ -1,5 +1,5 @@
 README for Circumference of Circle (HW4 for CSUF CPSC240-03, Floyd Holliday, Fall 2020)
-Time-stamp: <2020-09-07 11:53:54 Josh Ibad>
+Time-stamp: <2020-11-12 14:03:56 Josh Ibad>
 ------------------------------------------------------------
 	Program name: "Circumference of Circle" (HW 4 for CPSC 240-03, Fall 2020)
 	Details: Calculates the floating point circumference given its floating
