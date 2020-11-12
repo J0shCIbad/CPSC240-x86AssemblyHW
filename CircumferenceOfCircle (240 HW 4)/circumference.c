@@ -1,7 +1,7 @@
 /**
- * 	Program name: "Circumference Circle" (HW 4 for CPSC 240-03, Fall 2020)
- * 	Details: Calculates the integer circumference and area of a circle given
- *	its integer radius, using the egyptian estimation of pi.
+ * 	Program name: "Circumference of Circle" (HW 4 for CPSC 240-03, Fall 2020)
+ * 	Details: Calculates the floating point circumference given its floating
+ *	point radius, using IEEE-754 formatted value of pi.
  *  Copyright (C) 2020  Josh Ibad
 
  *	This program is free software: you can redistribute it and/or modify
@@ -19,22 +19,21 @@
 
 /*
  * Author name: Josh Ibad
- * Author email: ibadecoder@gmail.com
+ * Author email: joshcibad@csu.fullerton.edu
  * 
  * Program Name: "Circumference of Circle"
  * Programming Languages: One module in C, one module in x86
- * Date program began:     2020-Oct-30
- * Date program completed: 2020-Oct-30
+ * Date program began:     2020-Nov-06
+ * Date program completed: 2020-Nov-12
  * Files in this program: circumference.c, circle.asm
- * Status: Complete (as of 2020-10-30).  No errors found after extensive testing.
+ * Status: Complete (as of 2020-11-12).  No errors found after extensive testing.
  *
  * References:
  *	Jorgensen, x86-64 Assembly Language Programming w/ Ubuntu
- *	Holliday, Floyd	- arithmeticSample.asm 
- *		(https://sites.google.com/a/fullerton.edu/activeprofessor/open-source-info/x86-assembly/x86-examples/integer-arithmetic)
  *
  * Purpose:
- *	A C driver module to call the x86-64 assembly program of "circle.asm"
+ *	A C driver module to call the x86-64 assembly program of "circle.asm". Prints
+ *	welcome messages and prints the results of the program call.
  *
  * This file:
  *	Filename: circumference.c
@@ -48,18 +47,13 @@
 
 double circle();
 
-/*long doubleToLongHex(double dob){
-	long hex = 0;
-	for(int i=0; i<64; i++){}
-	return hex;
-}*/
-
 int main(){
 	printf("%s\n%s\n", "Welcome to \"Circumference of Circle\".",
 		"The main program will now call the circle function.");
 	double res = -1;
 	res = circle(); //Call to function
-	printf("%s: %f = %#016x", "The main received this number", res, 1);
+	long unsigned hex = *(long unsigned*)&res; //Hard conversion of type while preserving bits, for printing
+	printf("%s: %lf = 0x%lx\n", "The main received this number", res, hex);
 	printf("%s\n%s\n", "Have a nice day. Main will now return 0 to OS.", "---End of program---");
 	return 0;
 }
