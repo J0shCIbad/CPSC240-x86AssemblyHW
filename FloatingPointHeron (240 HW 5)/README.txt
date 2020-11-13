@@ -1,9 +1,9 @@
-README for Circumference of Circle (HW4 for CSUF CPSC240-03, Floyd Holliday, Fall 2020)
+README for Floating Point Herons Formula (HW 5 for CSUF CPSC240-03, Floyd Holliday, Fall 2020)
 Time-stamp: <2020-11-12 14:03:56 Josh Ibad>
 ------------------------------------------------------------
-	Program name: "Circumference of Circle" (HW 4 for CPSC 240-03, Fall 2020)
-	Details: Calculates the floating point circumference given its floating
-	point radius, using IEEE-754 formatted value of pi.
+	Program name: "Floating Point Herons Formula" (HW 5 for CPSC 240-03, Fall 2020)
+	Details: Calculates the floating point area of a triangle given its
+	three side lengths, using Heron's formula.
 	Copyright (C) 2020  Josh Ibad
 
 	This program is free software: you can redistribute it and/or modify
@@ -21,9 +21,9 @@ Time-stamp: <2020-11-12 14:03:56 Josh Ibad>
 	Author name: Josh Ibad
 	Author email: joshcibad@csu.fullerton.edu
 
-	Program Name: "Circumference of Circle" (HW 4 for CPSC 240-03, Fall 2020)
-	Purpose: Calculates the floating point circumference given its floating
-	point radius, using IEEE-754 formatted value of pi.
+	Program Name: "Floating Point Herons Formula" (HW 5 for CPSC 240-03, Fall 2020)
+	Purpose: Calculates the floating point area of a triangle given its
+	three side lengths, using Heron's formula.
 	Programming Languages: One module in C, one module in x86
 	Date program began:     2020-Nov-06
 	Date program completed: 2020-Nov-12
