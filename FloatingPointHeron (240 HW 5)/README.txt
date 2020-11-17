@@ -1,7 +1,7 @@
-README for Floating Point Herons Formula (HW 5 for CSUF CPSC240-03, Floyd Holliday, Fall 2020)
-Time-stamp: <2020-11-12 14:03:56 Josh Ibad>
+README for Area of Triangles (HW 5 for CSUF CPSC240-03, Floyd Holliday, Fall 2020)
+Time-stamp: <2020-11-17 14:03:56 Josh Ibad>
 ------------------------------------------------------------
-	Program name: "Floating Point Herons Formula" (HW 5 for CPSC 240-03, Fall 2020)
+	Program name: "Area of Triangles" (HW 5 for CPSC 240-03, Fall 2020)
 	Details: Calculates the floating point area of a triangle given its
 	three side lengths, using Heron's formula.
 	Copyright (C) 2020  Josh Ibad
@@ -21,35 +21,36 @@ Time-stamp: <2020-11-12 14:03:56 Josh Ibad>
 	Author name: Josh Ibad
 	Author email: joshcibad@csu.fullerton.edu
 
-	Program Name: "Floating Point Herons Formula" (HW 5 for CPSC 240-03, Fall 2020)
+	Program Name: "Area of Triangles" (HW 5 for CPSC 240-03, Fall 2020)
 	Purpose: Calculates the floating point area of a triangle given its
 	three side lengths, using Heron's formula.
 	Programming Languages: One module in C, one module in x86
-	Date program began:     2020-Nov-06
-	Date program completed: 2020-Nov-12
+	Date program began:     2020-Nov-12
+	Date program completed: 2020-Nov-17
 
-	Files in this program: circumference.c, circle.asm
-		circumference.c	= A C driver module to call the x86-64 assembly program
-		of "circle.asm". Prints welcome messages and prints the results of the
+	Files in this program: triangle.c, area.asm
+		triangle.c	= A C driver module to call the x86-64 assembly program
+		of "area.asm". Prints welcome messages and prints the results of the 
 		program call.
 		
-		circle.asm	= x86 Module that calculates a circumference of a circle
-		given a radius using double float arithmetic.
+		area.asm	= Accepts three floating point inputs representative of
+		side lengths of a triangle. The inputs are validated then the area 
+		is calculated using Heron's formula. 
 		
 		run.sh = Bash script for assembling, compiling, linking, and running program
 		
 		README.txt = This file. Contains info about the program.
 	
-	Status: Complete (as of 2020-11-12).  No errors found after extensive testing.
+	Status: Complete (as of 2020-Nov-17). Successful after testing.
  
 	References:
 		Jorgensen, x86-64 Assembly Language Programming w/ Ubuntu
 
 Compilation and Execution instructions:
-	Assemble: nasm -f elf64 -l circle.lis -o circle.o circle.asm
-	Compile: gcc -c -Wall -m64 -no-pie -o circumference.o circumference.c -std=c11
-	Link: gcc -m64 -no-pie -o circumference.out -std=c11 circumference.o circle.o
-	Run: ./circumference.out
+	Assemble: nasm -f elf64 -l area.lis -o area.o area.asm
+	Compile: gcc -c -Wall -m64 -no-pie -o triangle.o triangle.c -std=c11
+	Link: gcc -m64 -no-pie -o triangle.out -std=c11 triangle.o area.o
+	Run: ./triangle.out
 
 Warnings:
 	* The module circle.asm contains PIC non-compliant code.

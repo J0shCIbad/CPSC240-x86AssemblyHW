@@ -1,13 +1,13 @@
 #!/bin/bash
 
-#Program: Floating Point Herons Formula
+#Program: Area of Triangles
 #Author: Josh Ibad
 
 #Delete some un-needed files
 rm *.o
 rm *.out
 
-echo "The script file for Program \"Floating Point Herons Formula\" has begun"
+echo "The script file for Program \"Area of Triangles\" has begun"
 
 echo "Assemble area.asm"
 nasm -f elf64 -l area.lis -o area.o area.asm
@@ -18,7 +18,7 @@ gcc -c -Wall -m64 -no-pie -o triangle.o triangle.c -std=c11
 echo "Link the object files"
 gcc -m64 -no-pie -o triangle.out -std=c11 triangle.o area.o
 
-echo "Run the program \"Floating Point Herons Formula\":"
+echo "Run the program \"Area of Triangles\":"
 ./triangle.out
 
 echo "" #Empty line
