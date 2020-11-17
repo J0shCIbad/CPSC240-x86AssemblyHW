@@ -1,5 +1,5 @@
 README for Area of Triangles (HW 5 for CSUF CPSC240-03, Floyd Holliday, Fall 2020)
-Time-stamp: <2020-11-17 14:03:56 Josh Ibad>
+Time-stamp: <2020-11-17 07:38:23 Josh Ibad>
 ------------------------------------------------------------
 	Program name: "Area of Triangles" (HW 5 for CPSC 240-03, Fall 2020)
 	Details: Calculates the floating point area of a triangle given its
@@ -53,20 +53,33 @@ Compilation and Execution instructions:
 	Run: ./triangle.out
 
 Warnings:
+	New Warnings:
+	* Program checks input if it forms a valid triangle using Triangle Inequality 
+	Theorem (that any 2 side lengths summed is greater than the 3rd). If this condition is not met
+	the input is considered invalid.
+	
+	* Upon entering an invalid side length, the program dumps all inputs and prompts the
+	user for all three side lengths once more.
+	
+	* Upon entering three valid side lengths that do not form a valid triangle (under Triangle
+	Inequality Theorem) the program also dumps the inputs and prompts the user for all three
+	side lengths another time.
+	
+	Repeating Warnings:
+	* Error checking on inputs utilizes scanf functionality. The program will continually
+	prompt the user for a valid input until one is given. When an invalid input is given,
+	scanf first tries to truncate the input or convert it to a double. 
+		* An integer input is accepted and converted to its corresponding floating point value.
+		* An invalid input such as "TEN" can not be understood and is completely rejected.
+		* The inputs "1.0kfv", "1.asv", and "1oif" are all accepted as 1.0 since scanf will 
+		truncate the invalid portion of the input.
+	
+	* The printed floating point does not show all digits. However, the hexadecimal reflects the
+	full value of the number. The decimal output shows less precision than its hexadecimal counterpart.
+	
 	* The module circle.asm contains PIC non-compliant code.
 	* The assembler outputs a non-compliant object file.
 	* The C compiler is directed to create a non-compliant object file.
 	* The linker received a parameter telling the linker to expect 
 	non-compliant object files, and to output a non-compliant executable.
-	* The program runs successfully.
-	
-	Main warnings:
-	* Error checking on inputs utilizes scanf functionality. The program will continually
-	prompt the user for a valid input until one is given. When an invalid input is given,
-	scanf first tries to truncate the input or convert it to a double. An integer input is
-	accepted and converted to its corresponding floating point value. An invalid input such
-	as "TEN" can not be understood and is completely rejected, however, "1.0kfv", "1.asv", and "1oif"
-	are all accepted as 1.0 since scanf will truncate the invalid portion of the input.
-	
-	* The printed floating point does not show all digits. However, the hexadecimal reflects the
-	full value of the number. The decimal output shows less precision than its hexadecimal counterpart.
+	* The program runs successfully on Ubuntu 20.04, gcc v9.3.0
