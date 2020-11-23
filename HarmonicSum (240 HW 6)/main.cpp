@@ -24,9 +24,9 @@
  * Program Name: "Harmonic Sum"
  * Programming Languages: One module in C++, two modules in x86
  * Date program began:     2020-Nov-22
- * Date program completed: 2020-Nov-XX
+ * Date program completed: 2020-Nov-23
  * Files in this program: main.cpp, manager.asm, read_clock.asm
- * Status:  In progress...
+ * Status:  Completed (2020-Nov-23). Still testing and searching for suboptimizations before submitting.
  *
  * References:
  *	Jorgensen, x86-64 Assembly Language Programming w/ Ubuntu
