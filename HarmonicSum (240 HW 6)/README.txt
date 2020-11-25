@@ -103,7 +103,7 @@ Warnings:
 	
 References:
 	* x86 Intel Assembly manual = Jorgensen, x86-64 Assembly Language Programming w/ Ubuntu
-	* read_clock and x86 concepts = Based off of Professor Holiday's lectures and sample codes
+	* read_clock = Based off of Professor Holiday's lectures and sample codes
 		in https://sites.google.com/a/fullerton.edu/activeprofessor/open-source-info/x86-assembly/x86-examples
 	* Euler-Mascheroni Constant = https://en.wikipedia.org/wiki/Euler%E2%80%93Mascheroni_constant
 	* Asymptotic Expansion for the Harmonic Sum = https://en.wikipedia.org/wiki/Harmonic_number#Calculation
