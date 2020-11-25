@@ -24,16 +24,16 @@
  * Program Name: "Harmonic Sum"
  * Programming Languages: One module in C++, two modules in x86
  * Date program began:     2020-Nov-22
- * Date program completed: 2020-Nov-23
+ * Date program completed: 2020-Nov-25
  * Files in this program: main.cpp, manager.asm, read_clock.asm
- * Status:  Completed (2020-Nov-23). Still testing and searching for suboptimizations before submitting.
+ * Status:  Completed (2020-Nov-25). Successful execution after testing on Ubuntu 20.04, gcc v9.3.0
  *
  * References:
  *	Jorgensen, x86-64 Assembly Language Programming w/ Ubuntu
  *
  * Purpose:
  *	A C++ driver module to call the manager x86_64 module. Prints welcome
- *	and exit messages 
+ *	and exit messages.
  *
  * This file:
  *	Filename: main.cpp

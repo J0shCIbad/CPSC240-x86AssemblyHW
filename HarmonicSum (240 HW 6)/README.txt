@@ -1,5 +1,5 @@
 README for Harmonic Sum (HW 6 for CSUF CPSC240-03, Floyd Holliday, Fall 2020)
-Time-stamp: <2020-11-17 07:38:23 Josh Ibad>
+Time-stamp: <2020-11-25 11:24:23 Josh Ibad>
 ------------------------------------------------------------
 	Program name: "Harmonic Sum" (HW 6 for CPSC 240-03, Fall 2020)
 	Details: Given an input N, calculates the Harmonic Sum, H(N),
@@ -26,19 +26,28 @@ Time-stamp: <2020-11-17 07:38:23 Josh Ibad>
 	displaying 9 intermediate values in between.
 	Programming Languages: One module in C++, two modules in x86
 	Date program began:     2020-Nov-22
-	Date program completed: 2020-Nov-XX
+	Date program completed: 2020-Nov-X5
+	Status:  Completed (2020-Nov-25). Successful execution after testing on Ubuntu 20.04, gcc v9.3.0
 
 	Files in this program: main.cpp, manager.asm, read_clock.asm
-		main.cpp	= A C++ driver module to call the manager x86_64 module.
+		* main.cpp	= A C++ driver module to call the manager x86_64 module.
 		Prints welcome and exit messages 
 		
-		manager.asm	= 
+		* manager.asm	= Prompts user to input an integer denoting the number of terms to
+		include in the harmonic sum. Then calculates it, outputing intermediate
+		values in the way. CPU clock is read before and after the calculation,
+		and the difference (the duration of the calculation) is shown.
 		
-		read_clock.asm = Returns the number of ticks as calculated by the machine.
+			* This program will check the input and select which algorithm to use.
+			For n <= 5, the O(1) runtime asymptotic expansion algortihm is too 
+			inaccurate, thus the O(n) regular summation algorithm is used.
+			Otherwise, for n > 5, the O(1) runtime asymptotic expansion algorithm
 		
-		run.sh = Bash script for assembling, compiling, linking, and running program
+		* read_clock.asm = Returns the number of ticks as calculated by the machine.
 		
-		README.txt = This file. Contains info about the program.
+		* run.sh = Bash script for assembling, compiling, linking, and running program
+		
+		* README.txt = This file. Contains info about the program.
 	
 	Status: Complete (as of 2020-Nov-17). Successful after testing.
  
@@ -56,28 +65,34 @@ Compilation and Execution instructions:
 
 Warnings:
 	New Warnings:
-	* Program checks input if it forms a valid triangle using Triangle Inequality 
-	Theorem (that any 2 side lengths summed is greater than the 3rd). If this condition is not met
-	the input is considered invalid.
+	* This program uses two different algorithms for calculating H(n), depending on the
+	size of n.
+		* For small numbers (n <= 5), the program uses the regular summation algorithm
+		which runs in O(n) runtime complexity but retains maximum precision.
+		* For larger numbers (n > 5), the program uses the asymptotic expaansion algorithm
+		which runs in O(1) runtime complexity even for the maximum input of n, at the
+		cost of acceptible imprecision which decreases as n grows (|Error| < 1 E -10)
 	
-	* Upon entering an invalid side length, the program dumps all inputs and prompts the
-	user for all three side lengths once more.
+	* The asymptotic expansion algorithm used for n > 5 is a very accurate approximation
+	of H(n) at the benefit that it performs with O(1) constant runtime and space complexity.
+	This will explain the slight imprecision for any number n > 5.
+		* The error only decreases as n increases, since the value of the first terms:
+		H(n) = ln(n) + y (Euler-mascheroni constant), grows in accuracy for larger values of n.
+		* The error should only be at most, 1 E -10
 	
-	* Upon entering three valid side lengths that do not form a valid triangle (under Triangle
-	Inequality Theorem) the program also dumps the inputs and prompts the user for all three
-	side lengths another time.
+	* Because the program directly calculates H(n), it does not actually find intermediate values.
+	To fit the expected output, the program calculates the "intermediate" values separately,
+	to simulate the program "summing" up to H(n). This adds to the runtime, however due to
+	the O(1) time complexity and the "intermediate" values being only 10 intermediates printed,
+	the time complexity remains O(1), but multiplied by a constant factor.
 	
 	Repeating Warnings:
 	* Error checking on inputs utilizes scanf functionality. The program will continually
 	prompt the user for a valid input until one is given. When an invalid input is given,
-	scanf first tries to truncate the input or convert it to a double. 
-		* An integer input is accepted and converted to its corresponding floating point value.
-		* An invalid input such as "TEN" can not be understood and is completely rejected.
-		* The inputs "1.0kfv", "1.asv", and "1oif" are all accepted as 1.0 since scanf will 
-		truncate the invalid portion of the input.
-	
-	* The printed floating point does not show all digits. However, the hexadecimal reflects the
-	full value of the number. The decimal output shows less precision than its hexadecimal counterpart.
+	scanf first tries to truncate the input or convert it to a long integer.
+		* An input of "10sdcv" is truncated to 10, and accepted as 10
+		* An input of "TEN" is completely invalid and rejected
+		* An input of 10.01 is truncated to 10, and accepted as 10
 	
 	* The module circle.asm contains PIC non-compliant code.
 	* The assembler outputs a non-compliant object file.
