@@ -45,7 +45,7 @@ Time-stamp: <2020-11-25 11:24:23 Josh Ibad>
 		
 		* read_clock.asm = Returns the number of ticks as calculated by the machine.
 		
-		* run.sh = Bash script for assembling, compiling, linking, and running program
+		* r.sh = Bash script for assembling, compiling, linking, and running program
 		
 		* README.txt = This file. Contains info about the program.
 	
