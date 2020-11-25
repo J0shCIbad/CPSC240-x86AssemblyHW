@@ -100,3 +100,11 @@ Warnings:
 	* The linker received a parameter telling the linker to expect 
 	non-compliant object files, and to output a non-compliant executable.
 	* The program runs successfully on Ubuntu 20.04, gcc v9.3.0
+	
+References:
+	* x86 Intel Assembly manual = Jorgensen, x86-64 Assembly Language Programming w/ Ubuntu
+	* read_clock and x86 concepts = Based off of Professor Holiday's lectures and sample codes
+		in https://sites.google.com/a/fullerton.edu/activeprofessor/open-source-info/x86-assembly/x86-examples
+	* Euler-Mascheroni Constant = https://en.wikipedia.org/wiki/Euler%E2%80%93Mascheroni_constant
+	* Asymptotic Expansion for the Harmonic Sum = https://en.wikipedia.org/wiki/Harmonic_number#Calculation
+	* Denominators of Bernouli(2k)/2k for Asymptotic Expansion: https://oeis.org/A006953
